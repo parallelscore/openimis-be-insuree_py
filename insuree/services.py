@@ -336,7 +336,9 @@ class FamilyService:
     @register_service_signal('family_service.create_or_update')
     def create_or_update(self, data):
         head_insuree_data = data.pop('head_insuree')
-        head_insuree_data["head"] = True
+
+        if 'head' not in head_insuree_data:
+            head_insuree_data["head"] = True
         head_insuree = InsureeService(
             self.user).create_or_update(head_insuree_data)
         data["head_insuree"] = head_insuree
