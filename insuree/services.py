@@ -356,6 +356,9 @@ class FamilyService:
         family.save()
         head_insuree.family = family
         head_insuree.save()
+        # update Family members
+        self.update_family_members(data)
+
         return family
 
     def set_deleted(self, family, delete_members):
@@ -379,3 +382,13 @@ class FamilyService:
             insuree_service.set_deleted(member)
         else:
             insuree_service.remove(member)
+
+    def update_family_members(self, data):
+        family_members = data.get('members_family')
+        family_id = data.get("id")
+
+        if family_members:
+            for member in family_members:
+                if not member.head:
+                    member.family_id = family_id
+                    member.save()
